@@ -205,13 +205,13 @@ def checkDoors() {
                 send("Alert: It's sunset and $doorName is open for $threshold minutes")
                 sendSMS("It's sunset and $doorName is open for $threshold minutes")
                 state.opened[doorName] = true
-                //closes Door after one minute 
+                //closes Door after three minutes
                 runIn(60*3,  door.close())
             }
         } else if (doorOpen == "closed" && state.opened[doorName]) {
             // previously open, now closed
             log.debug("checkDoors: Door had been previously open, is now closed")
-			sendSMS("OK: $doorName closed")
+	    sendSMS("OK: $doorName closed")
             send("OK: $doorName closed")
 
             state.opened[doorName] = false
