@@ -204,14 +204,14 @@ def checkDoors() {
 
                 send("Alert: It's sunset and $doorName is open for $threshold minutes")
                 sendSMS("It's sunset and $doorName is open for $threshold minutes")
-                state.opened[doorName] = true
+                
                 //closes Door after three minutes
-                runIn(60*3,  door.close())
+                runIn(60*3, shutDoor(door))
             }
         } else if (doorOpen == "closed" && state.opened[doorName]) {
             // previously open, now closed
             log.debug("checkDoors: Door had been previously open, is now closed")
-	    sendSMS("OK: $doorName closed")
+	        sendSMS("OK: $doorName closed")
             send("OK: $doorName closed")
 
             state.opened[doorName] = false
@@ -221,11 +221,26 @@ def checkDoors() {
 }
 
 private send(msg) {
+
     if (sendPushMessage != "No") {
         sendPush(msg)
     }
 
     log.debug msg
+}
+
+private shutDoor(door) {
+     door.close()
+     runIn(60*1, changeDoorState(door))
+}
+
+private changeDoorState(door) {
+    if (checkDoor(door) != "open") {
+        state.opened[door.displayName] = false
+    }else{
+        state.opened[door.displayName] = true
+        checkDoors
+    }
 }
 
 private sendSMS(msg) {
