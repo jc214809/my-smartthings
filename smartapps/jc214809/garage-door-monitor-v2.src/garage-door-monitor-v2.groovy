@@ -189,8 +189,14 @@ def checkDoors() {
             if (state.threshold >= threshold) {
                 log.debug("checkDoors: Door has been open past threshold, sending an alert")
 
-                send("Alert: It's sunset and $doorName is open for $threshold minutes")
-                state.opened[doorName] = true
+                //send("Alert: It's sunset and $doorName is open for $threshold minutes")
+                //state.opened[doorName] = true
+                if (state.threshold >= (threshold*2)) {
+                	door.close()
+                    send("Alert: The $doorName has been open for too long and is now closing")
+                }else{
+                	send("Alert: The $doorName has been open for $state.threshold minutes past closing time")
+                }
             }
         } else if (doorOpen == "closed" && state.opened[doorName]) {
             // previously open, now closed
@@ -205,6 +211,7 @@ def checkDoors() {
             log.debug("checkDoors: Door closed before " + threshold + " threshold.  Threshold check: ${state.threshold} minutes (threshold reset to 0)")
             state.threshold = 0
         }
+        log.debug("End " + state.opened[doorName])
     }
 }
 
