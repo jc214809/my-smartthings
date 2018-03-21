@@ -1,5 +1,5 @@
 /**
- *  Garage Door Monitor V2
+ *  Garage Door Monitor V3
  *
  *  Copyright 2017 Joel Jayson Clark
  *
@@ -14,7 +14,7 @@
  *
  */
 definition(
-    name: "Garage Door Monitor V2",
+    name: "Garage Door Monitor V3",
     namespace: "jc214809",
     author: "Joel Jayson Clark",
     description: "Will shut garage door ",
