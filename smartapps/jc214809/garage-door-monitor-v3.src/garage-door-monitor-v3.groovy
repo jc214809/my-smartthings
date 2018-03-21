@@ -77,11 +77,10 @@ def updated() {
 
 def initialize() {
     state.monitoring = false
-    state.opened = [: ]
+    state.opened = [:]
     state.threshold = 0
 
-    doors ? .each {
-        door - >
+    doors?.each { door ->
             state.opened.put(door.displayName, false)
     }
 
@@ -175,7 +174,7 @@ def checkDoors() {
     if (!state.monitoring) {
         return
     }
-    doors ? .each { door - >
+    doors?.each{ door ->
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
         def timeOpened = null;
@@ -223,7 +222,7 @@ private resetDoor(door) {
 }
 
 private getLabel() {
-    app.label ? : "SmartThings"
+    app.label ?: "SmartThings"
 }
 
 private getSunsetOffset() {
