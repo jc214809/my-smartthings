@@ -192,10 +192,9 @@ def checkDoors() {
                 log.debug("checkDoors: readableNowTime: ${readableNowTime}")
             }
             // previously closed, now open
-            //if (state.timeToClose > 0) {
             log.debug("checkDoors: Not 0")
-            log.debug("checkDoors: Compare is ${readableCloseTime > readableNowTime}")
-            if (readableCloseTime > readableNowTime) {
+            log.debug("checkDoors: Compare is ${timeToday(state.timeToClose).time > timeToday(now()).time}")
+            if (timeToday(state.timeToClose).time > timeToday(now()).time) {
                 log.debug("checkDoors: About to close door")
                 door.close()
                 log.debug("checkDoors: Door closing")
@@ -203,10 +202,10 @@ def checkDoors() {
             } else {
                 send("Alert: The $doorName is open")
             }
-            //}
         } else if (doorOpen == "closed") {
             // Door closed before threshold, reset threshold
             state.timeToClose = null;
+            log.debug("checkDoors: Door is Closed. Time to close is ${state.timeToClose}")
         }
         log.debug("checkDoors: End " + state.opened[doorName])
     }
