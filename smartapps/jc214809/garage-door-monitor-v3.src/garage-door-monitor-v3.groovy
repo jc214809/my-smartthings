@@ -193,7 +193,7 @@ def checkDoors() {
             log.debug("checkDoors: When to close ${state.timeToClose}")
             log.debug("checkDoors: state.timeToClose: ${state.timeToClose}")
             log.debug("checkDoors: Compare is ${timeToday(state.timeToClose, location.timeZone).time > timeToday(readableNowTime, location.timeZone).time}")
-            if (timeToday(state.timeToClose, location.timeZone).time > timeToday(readableNowTime, location.timeZone).time) {
+            if (timeToday(state.timeToClose, location.timeZone).time < timeToday(readableNowTime, location.timeZone).time) {
                 log.debug("checkDoors: About to close door")
                 door.close()
                 log.debug("checkDoors: Door closing")
