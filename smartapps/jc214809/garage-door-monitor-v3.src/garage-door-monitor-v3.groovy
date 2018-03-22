@@ -185,7 +185,7 @@ def checkDoors() {
             log.debug("checkDoors: Should times be set? ${state.timeToClose == null}")
             if (state.timeToClose == null) {
                 state.timeToClose = new Date(now() + 9*60*1000);
-                def readableCloseTime = state.timeToClose.format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")); 
+                def readableCloseTime = new Date(state.timeToClose).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")); 
                 
             }
             // previously closed, now open
