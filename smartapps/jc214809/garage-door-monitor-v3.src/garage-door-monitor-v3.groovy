@@ -177,18 +177,26 @@ def checkDoors() {
     doors?.each{ door ->
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
-        def timeOpened = null;
+        def timeOpened = 0;
 
         if (doorOpen == "open") {
-            if (timeOpened == null) {
+            if (timeOpened == 0) {
                 timeOpened = now()
+                log.debug("checkDoors: TimeOpened check: ${timeOpened}")
             }
             // previously closed, now open
-            log.debug("checkDoors: Door was closed, is now open.  Threshold check: ${state.threshold} minutes (need " + threshold + "minutes)")
-            if (timeOpened == null) {
-                def duration = now() - timeOpened;
-                if (duration >= 10 * 60 * 1000) {
+            //log.debug("checkDoors: Door was closed, is now open.  Threshold check: ${state.threshold} minutes (need " + threshold + "minutes)")
+            if (timeOpened > 0) {
+            	log.debug("checkDoors: Not Null")
+                def duration = ((now() / (1000*60)) % 60) - ((timeOpened / (1000*60)) % 60);
+                log.debug(((now() / (1000*60)) % 60))
+                log.debug(((timeOpened / (1000*60)) % 60))
+                log.debug(duration)
+                log.debug(duration >= 10)
+                if (duration >= 2 * 60 * 1000) {
+                	log.debug("checkDoors: About to close door")
                     door.close()
+                    log.debug("checkDoors: Door closing")
                     runIn(60, resetDoor(door));
                 } else {
                     send("Alert: The $doorName has been open for $duration minutes")
@@ -196,7 +204,7 @@ def checkDoors() {
             }
         } else if (doorOpen == "closed") {
             // Door closed before threshold, reset threshold
-            timeOpened = null;
+            timeOpened = 0;
         }
         log.debug("End " + state.opened[doorName])
     }
@@ -216,8 +224,9 @@ def checkDoor(door) {
 
 private resetDoor(door) {
     if (checkDoor(door)) {
+    	log.debug("checkDoors: Door closing")
         send("Alert: The $door.displayName has been open for too long and is now closing")
-        timeOpened = null; 
+        timeOpened = 0; 
     }
 }
 
