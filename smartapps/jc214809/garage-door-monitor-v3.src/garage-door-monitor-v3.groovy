@@ -179,15 +179,15 @@ def checkDoors() {
     doors?.each{ door ->
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
-        def readableNowTime = new Date(now()).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone("EST"));
+        def readableNowTime = new Date(now()).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("EST"));
         log.debug("checkDoors: readableNowTime: ${readableNowTime}")
 
         if (doorOpen == "open") {
             log.debug("checkDoors: Should times be set? ${state.timeToClose == null}")
             if (state.timeToClose == null) {
                 //state.timeToClose = new Date(now() + 9*60*1000);
-                state.timeToClose = new Date(now() + 9*60*1000).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone("EST"));
-                //def state.timeToClose = new Date(state.timeToClose).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")); 
+                state.timeToClose = new Date(now() + 9*60*1000).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("EST"));
+                //def state.timeToClose = new Date(state.timeToClose).format("", TimeZone.getTimeZone("UTC")); 
             }
             // previously closed, now open
             log.debug("checkDoors: When to close ${state.timeToClose}")
