@@ -198,7 +198,7 @@ def checkDoors() {
                 door.close()
                 log.debug("checkDoors: Door closing")
                 log.debug("checkDoors: The Door object is $door")
-                runIn(60, resetDoor(door));
+                runIn(60, resetDoor());
             } else {
                 send("Alert: The $doorName is open")
             }
@@ -222,15 +222,20 @@ def checkDoor(door) {
     def latestValue = door.currentValue("contact")
 }
 
-private resetDoor(door) {
-    //log.debug("checkDoors: The Door object in resetDoor is $door")
-    //def value = checkDoor(door)
-    //log.debug("checkDoors: The door is $value")
-    //if (checkDoor(door)) {
+private resetDoor() {
+
+doors?.each { door ->
+               if (checkDoor(door)) {
     	log.debug("checkDoors: Door closing")
         send("Alert: The $door.displayName has been open for too long and is now closing")
         state.timeToClose = null; 
-    //}
+    }
+    }
+
+    //log.debug("checkDoors: The Door object in resetDoor is $door")
+    //def value = checkDoor(door)
+    //log.debug("checkDoors: The door is $value")
+
 }
 
 private getLabel() {
