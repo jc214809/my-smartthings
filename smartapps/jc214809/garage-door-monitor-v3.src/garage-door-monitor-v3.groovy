@@ -197,6 +197,7 @@ def checkDoors() {
                 log.debug("checkDoors: About to close door")
                 door.close()
                 log.debug("checkDoors: Door closing")
+                log.debug("checkDoors: The Door object is $door")
                 runIn(60, resetDoor(door));
             } else {
                 send("Alert: The $doorName is open")
@@ -222,6 +223,7 @@ def checkDoor(door) {
 }
 
 private resetDoor(door) {
+    log.debug("checkDoors: The Door object in resetDoor is $door")
     def value = checkDoor(door)
     log.debug("checkDoors: The door is $value")
     if (checkDoor(door)) {
