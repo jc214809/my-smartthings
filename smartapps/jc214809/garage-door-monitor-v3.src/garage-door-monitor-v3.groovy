@@ -186,7 +186,7 @@ def checkDoors() {
             log.debug("checkDoors: Should times be set? ${state.timeToClose == null}")
             if (state.timeToClose == null) {
                 //state.timeToClose = new Date(now() + 9*60*1000);
-                state.timeToClose = new Date(now() + 9*60*1000).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("EST"));
+                state.timeToClose = new Date(now() + 7*60*1000).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("EST"));
                 //def state.timeToClose = new Date(state.timeToClose).format("", TimeZone.getTimeZone("UTC")); 
             }
             // previously closed, now open
@@ -223,14 +223,14 @@ def checkDoor(door) {
 }
 
 private resetDoor(door) {
-    log.debug("checkDoors: The Door object in resetDoor is $door")
-    def value = checkDoor(door)
-    log.debug("checkDoors: The door is $value")
-    if (checkDoor(door)) {
+    //log.debug("checkDoors: The Door object in resetDoor is $door")
+    //def value = checkDoor(door)
+    //log.debug("checkDoors: The door is $value")
+    //if (checkDoor(door)) {
     	log.debug("checkDoors: Door closing")
         send("Alert: The $door.displayName has been open for too long and is now closing")
         state.timeToClose = null; 
-    }
+    //}
 }
 
 private getLabel() {
