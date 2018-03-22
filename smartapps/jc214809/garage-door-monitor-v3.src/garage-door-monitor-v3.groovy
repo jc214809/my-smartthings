@@ -223,6 +223,8 @@ def checkDoor(door) {
 }
 
 private resetDoor(door) {
+    def value = checkDoor(door)
+    log.debug("checkDoors: The door is $value")
     if (checkDoor(door)) {
     	log.debug("checkDoors: Door closing")
         send("Alert: The $door.displayName has been open for too long and is now closing")
