@@ -179,22 +179,21 @@ def checkDoors() {
     doors?.each{ door ->
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
-        def readableNowTime = new Date(now()).format("dd.MM.yyyy HH:mm:ss,S", TimeZone.getTimeZone('EST'));
+        def readableNowTime = new Date(now()).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"));
 
         if (doorOpen == "open") {
             log.debug("checkDoors: Should times be set? ${state.timeToClose == null}")
             if (state.timeToClose == null) {
                 state.timeToClose = new Date(now() + 9*60*1000);
-                def readableCloseTime = state.timeToClose.format("dd.MM.yyyy HH:mm:ss,S", TimeZone.getTimeZone('EST'))
+                def readableCloseTime = state.timeToClose.format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")); 
                 
                 log.debug("checkDoors: When to close ${state.timeToClose}")
                 log.debug("checkDoors: readableCloseTime: ${readableCloseTime}")
                 log.debug("checkDoors: readableNowTime: ${readableNowTime}")
             }
             // previously closed, now open
-            log.debug("checkDoors: Not 0")
-            log.debug("checkDoors: Compare is ${timeToday(state.timeToClose).time > timeToday(now()).time}")
-            if (timeToday(state.timeToClose).time > timeToday(now()).time) {
+            log.debug("checkDoors: Compare is ${timeToday(readableCloseTime).time > timeToday(readableNowTime).time}")
+            if (timeToday(readableCloseTime).time > timeToday(readableNowTime).time) {
                 log.debug("checkDoors: About to close door")
                 door.close()
                 log.debug("checkDoors: Door closing")
