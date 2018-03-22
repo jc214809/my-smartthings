@@ -180,19 +180,18 @@ def checkDoors() {
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
         def readableNowTime = new Date(now()).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone("EST"));
+        log.debug("checkDoors: readableNowTime: ${readableNowTime}")
 
         if (doorOpen == "open") {
             log.debug("checkDoors: Should times be set? ${state.timeToClose == null}")
             if (state.timeToClose == null) {
                 state.timeToClose = new Date(now() + 9*60*1000);
-                def readableCloseTime = new Date(state.timeToClose).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone("EST"));
+                def readableCloseTime = new Date(now() + 9*60*1000).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone("EST"));
                 //def readableCloseTime = new Date(state.timeToClose).format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")); 
-                
             }
             // previously closed, now open
             log.debug("checkDoors: When to close ${state.timeToClose}")
             log.debug("checkDoors: readableCloseTime: ${readableCloseTime}")
-            log.debug("checkDoors: readableNowTime: ${readableNowTime}")
             log.debug("checkDoors: Compare is ${timeToday(readableCloseTime).time > timeToday(readableNowTime).time}")
             if (timeToday(readableCloseTime).time > timeToday(readableNowTime).time) {
                 log.debug("checkDoors: About to close door")
