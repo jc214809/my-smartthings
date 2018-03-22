@@ -161,6 +161,7 @@ def sunsetHandler() {
 }
 
 def checkDoors() {
+    log.debug("checkDoors: What is timeToClose? ${state.timeToClose}")
     // if we're doing Time of Day monitoring, see if this is within the times they specified
     if (monitoringType == "Time of Day") {
         def currTime = now()
@@ -180,6 +181,7 @@ def checkDoors() {
         def doorOpen = checkDoor(door)
 
         if (doorOpen == "open") {
+            log.debug("checkDoors: Should times be set? ${state.timeToClose == null}")
             if (state.timeToClose == null) {
                 state.timeToClose = new Date(now() + 9*60*1000);
                 def readableCloseTime = state.timeToClose.format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'))
