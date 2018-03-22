@@ -222,20 +222,17 @@ def checkDoor(door) {
     def latestValue = door.currentValue("contact")
 }
 
-private resetDoor() {
-
-doors?.each { door ->
-               if (checkDoor(door)) {
-    	log.debug("checkDoors: Door closing")
-        send("Alert: The $door.displayName has been open for too long and is now closing")
-        state.timeToClose = null; 
+def resetDoor() {
+    doors?.each { door ->
+        if (checkDoor(door)) {
+    	    log.debug("checkDoors: Door closing")
+            send("Alert: The $door.displayName has been open for too long and is now closing")
+            state.timeToClose = null; 
+        }
     }
-    }
-
     //log.debug("checkDoors: The Door object in resetDoor is $door")
     //def value = checkDoor(door)
     //log.debug("checkDoors: The door is $value")
-
 }
 
 private getLabel() {
