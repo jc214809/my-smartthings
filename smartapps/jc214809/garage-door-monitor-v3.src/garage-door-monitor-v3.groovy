@@ -181,9 +181,9 @@ def checkDoors() {
 
         if (doorOpen == "open") {
             if (timeToClose == 0) {
-                timeToClose = now() + 9 * 60 * 1000;
-                def readableCloseTime = new Date(((long)timeToClose) * 1000);
-                def readableNowTime = new Date(((long)now()) * 1000);
+                timeToClose = new Date(now() + 9*60*1000);
+                def readableCloseTime = timeToClose.format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'))
+                def readableNowTime = new Date(now()).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'));
                 log.debug("checkDoors: When to close ${timeToClose}")
                 log.debug("checkDoors: readableCloseTime: ${readableCloseTime}")
                 log.debug("checkDoors: readableNowTime: ${readableNowTime}")
