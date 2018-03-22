@@ -187,11 +187,11 @@ def checkDoors() {
                 state.timeToClose = new Date(now() + 9*60*1000);
                 def readableCloseTime = state.timeToClose.format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")); 
                 
-                log.debug("checkDoors: When to close ${state.timeToClose}")
-                log.debug("checkDoors: readableCloseTime: ${readableCloseTime}")
-                log.debug("checkDoors: readableNowTime: ${readableNowTime}")
             }
             // previously closed, now open
+            log.debug("checkDoors: When to close ${state.timeToClose}")
+            log.debug("checkDoors: readableCloseTime: ${readableCloseTime}")
+            log.debug("checkDoors: readableNowTime: ${readableNowTime}")
             log.debug("checkDoors: Compare is ${timeToday(readableCloseTime).time > timeToday(readableNowTime).time}")
             if (timeToday(readableCloseTime).time > timeToday(readableNowTime).time) {
                 log.debug("checkDoors: About to close door")
