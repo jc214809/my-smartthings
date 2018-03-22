@@ -193,7 +193,7 @@ def checkDoors() {
             // previously closed, now open
             //if (state.timeToClose > 0) {
             log.debug("checkDoors: Not 0")
-            if (state.timeToClose >= now()) {
+            if (readableCloseTime >= now()) {
                 	log.debug("checkDoors: About to close door")
                     door.close()
                     log.debug("checkDoors: Door closing")
