@@ -79,6 +79,7 @@ def initialize() {
     state.monitoring = false
     state.opened = [:]
     state.threshold = 0
+    state.timeToClose = null;
 
     doors?.each { door ->
             state.opened.put(door.displayName, false)
@@ -177,21 +178,20 @@ def checkDoors() {
     doors?.each{ door ->
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
-        def timeToClose = 0;
 
         if (doorOpen == "open") {
-            if (timeToClose == 0) {
-                timeToClose = new Date(now() + 9*60*1000);
-                def readableCloseTime = timeToClose.format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'))
+            if (state.timeToClose == null) {
+                state.timeToClose = new Date(now() + 9*60*1000);
+                def readableCloseTime = state.timeToClose.format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'))
                 def readableNowTime = new Date(now()).format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'));
-                log.debug("checkDoors: When to close ${timeToClose}")
+                log.debug("checkDoors: When to close ${state.timeToClose}")
                 log.debug("checkDoors: readableCloseTime: ${readableCloseTime}")
                 log.debug("checkDoors: readableNowTime: ${readableNowTime}")
             }
             // previously closed, now open
-            if (timeToClose > 0) {
-            	log.debug("checkDoors: Not 0")
-               if (timeToClose >= now()) {
+            //if (state.timeToClose > 0) {
+            log.debug("checkDoors: Not 0")
+            if (state.timeToClose >= now()) {
                 	log.debug("checkDoors: About to close door")
                     door.close()
                     log.debug("checkDoors: Door closing")
@@ -199,10 +199,10 @@ def checkDoors() {
                 } else {
                     send("Alert: The $doorName is open")
                 }
-            }
+            //}
         } else if (doorOpen == "closed") {
             // Door closed before threshold, reset threshold
-            timeToClose = 0;
+            state.timeToClose = null;
         }
         log.debug("checkDoors: End " + state.opened[doorName])
     }
@@ -223,7 +223,7 @@ private resetDoor(door) {
     if (checkDoor(door)) {
     	log.debug("checkDoors: Door closing")
         send("Alert: The $door.displayName has been open for too long and is now closing")
-        timeToClose = 0; 
+        state.timeToClose = null; 
     }
 }
 
