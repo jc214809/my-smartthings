@@ -193,17 +193,19 @@ def checkDoors() {
         def doorOpen = checkDoor(door)
 
         log.debug("checkDoors: Door $doorName: $doorOpen, previous state: " + state.opened[doorName])
-
-        if (doorOpen == "open" && !state.opened[doorName]) {
+		 //log.debug("1 " + doorOpen)
+         //log.debug("2 " + !state.opened[doorName])
+        if (doorOpen == "open") {
             // previously closed, now open
             state.threshold = state.threshold + 5
             log.debug("checkDoors: Door was closed, is now open.  Threshold check: ${state.threshold} minutes (need " + threshold + "minutes)")
-
+			 //log.debug("checkDoors: threshold" + threshold)
+             //log.debug("checkDoors: state.threshold" + state.threshold)
             if (state.threshold >= threshold) {
                 log.debug("checkDoors: Door has been open past threshold, sending an alert")
 
-                send("Alert: It's sunset and $doorName is open for $threshold minutes")
-                sendSMS("It's sunset and $doorName is open for $threshold minutes")
+                send("Alert: $doorName is open")
+                sendSMS("$doorName is open")
                 
                 //closes Door after three minutes
                 runIn(60*3, shutDoor(door))
@@ -235,12 +237,12 @@ private shutDoor(door) {
 }
 
 private changeDoorState(door) {
-    if (checkDoor(door) != "open") {
-        state.opened[door.displayName] = false
-    }else{
-        state.opened[door.displayName] = true
-        checkDoors
-    }
+    	if (checkDoor(door) != "open") {
+        	state.opened[door.displayName] = false
+    	}else{
+        	state.opened[door.displayName] = true
+        	checkDoors
+    	}
 }
 
 private sendSMS(msg) {

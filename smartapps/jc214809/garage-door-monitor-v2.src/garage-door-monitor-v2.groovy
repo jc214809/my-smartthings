@@ -178,10 +178,15 @@ def checkDoors() {
     doors?.each { door ->
         def doorName = door.displayName
         def doorOpen = checkDoor(door)
-
+		def timeOpened = null;
+        
         log.debug("checkDoors: Door $doorName: $doorOpen, previous state: " + state.opened[doorName])
 
         if (doorOpen == "open" && !state.opened[doorName]) {
+        	if(timeOpened == null){
+            	timeOpened =  now()
+            }
+        
             // previously closed, now open
             state.threshold = state.threshold + 5
             log.debug("checkDoors: Door was closed, is now open.  Threshold check: ${state.threshold} minutes (need " + threshold + "minutes)")
@@ -191,11 +196,15 @@ def checkDoors() {
 
                 //send("Alert: It's sunset and $doorName is open for $threshold minutes")
                 //state.opened[doorName] = true
-                if (state.threshold >= (threshold*2)) {
+                if(timeOpened == null){
+                def difference = Math.abs(timeOpened - now);
+                if (difference > 2 * 60 * 1000) {
                 	door.close()
                     send("Alert: The $doorName has been open for too long and is now closing")
+                    timeOpened = null;
                 }else{
                 	send("Alert: The $doorName has been open for $state.threshold minutes past closing time")
+                }
                 }
             }
         } else if (doorOpen == "closed" && state.opened[doorName]) {
@@ -203,13 +212,14 @@ def checkDoors() {
             log.debug("checkDoors: Door had been previously open, is now closed")
 
             send("OK: $doorName closed")
-
+			timeOpened = null;
             state.opened[doorName] = false
             state.threshold = 0
         } else if (doorOpen == "closed"){
             // Door closed before threshold, reset threshold
             log.debug("checkDoors: Door closed before " + threshold + " threshold.  Threshold check: ${state.threshold} minutes (threshold reset to 0)")
             state.threshold = 0
+            timeOpened = null;
         }
         log.debug("End " + state.opened[doorName])
     }
@@ -219,7 +229,7 @@ private send(msg) {
     if (sendPushMessage != "No") {
         sendPush(msg)
     }
-
+	
     log.debug msg
 }
 
